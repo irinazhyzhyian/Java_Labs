@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<body>
+<ul th:fragment="orderTabs (status)" class="nav nav-tabs orders-tabs mt-4">
+  <li class="nav-item">
+    <a aria-current="page"
+       th:class="'nav-link ' + ${status == 'WAITING_APPROVAL' ? 'active' : ''}"
+       href="?status=WAITING_APPROVAL">
+      Need to approve
+    </a>
+  </li>
+  <li class="nav-item">
+    <a th:class="'nav-link ' + ${status == 'IN_LIBRARY' ? 'active' : ''}"
+       href="?status=IN_LIBRARY">
+      Approved reading in library
+    </a>
+  </li>
+  <li class="nav-item">
+    <a th:class="'nav-link ' + ${status == 'OUT_LIBRARY' ? 'active' : ''}"
+       href="?status=OUT_LIBRARY">
+     Approved reading out library
+    </a>
+  </li>
+
+</ul>
+</body>
+</html>

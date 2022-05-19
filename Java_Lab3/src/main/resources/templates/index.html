@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:replace="fragments/head-section :: head (metaTitle='Books')"></head>
+<body>
+<nav th:replace="fragments/header :: header"></nav>
+<div class="container align-items-center">
+  <div class="card mb-3 main-page-dish" th:each="book, iStat : ${booksPage}">
+    <div class="container">
+      <div class="card-body row justify-content-center align-self-center">
+        <div class="col-8">
+          <h5 class="card-title" th:text="${book.name}"></h5>
+          <h6 class="card-title" th:text="${book.author}"></h6>
+          <p class="card-text" th:text="${book.description}"></p>
+          <p class="card-text mt-2" th:text="${book.count} + ' books in the Library'"></p>
+        </div>
+        <div class="col-4 align-self-center">
+          <form method="POST" th:action="@{/orders}" class="text-right" sec:authorize="hasAuthority('READER')">
+            <input type="hidden" name="bookId" th:value="${book.id}">
+            <input type="submit" class="btn btn-success" value="GET">
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<nav th:if="${booksPage.totalPages > 0}" class="container align-items-center paginator">
+  <ul class="pagination">
+    <li th:if="${booksPage.number + 1 <=1}" class="page-item disabled">
+      <span class="page-link">Назад</span>
+    </li>
+    <li th:if="${booksPage.number + 1>1}" class="page-item">
+      <a class="page-link" th:href="@{/(size=${booksPage.size}, page=${booksPage.number})}">
+        Prev
+      </a>
+    </li>
+    <li th:each="pageNumber : ${pageNumbers}"
+        th:class="'page-item ' + ${pageNumber == (booksPage.number + 1) ? 'active' : ''}">
+
+      <a class="page-link"
+         th:href="@{/(size=${booksPage.size}, page=${pageNumber})}"
+         th:text="${pageNumber}">
+      </a>
+    </li>
+    <li th:if="${(booksPage.number + 1) >= booksPage.totalPages}" class="page-item disabled">
+      <span class="page-link">Next</span>
+    </li>
+    <li th:if="${(booksPage.number + 1) < booksPage.totalPages}"
+        th:class="'page-item'">
+      <a class="page-link" th:href="@{/(size=${booksPage.size}, page=${booksPage.number + 2})}">
+        Next
+      </a>
+    </li>
+  </ul>
+</nav>
+</body>
+</html>
